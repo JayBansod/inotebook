@@ -1,8 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
+//for password encription
+const bcrypt = require("bcryptjs");
+
 // for validation
 const { body, validationResult } = require("express-validator");
+
+//importing jwt token
+var jwt = require("jsonwebtoken");
+
+//for giving token
+const JWT_SECRET = "JayISGoodB$oy";
 
 // create a user using : POST "/api/auth/createuser".no lofin required
 router.post(
@@ -14,6 +23,7 @@ router.post(
   ],
   async (req, res) => {
     // for save without validation
+
     // console.log(req.body);
     // const user = User(req.body);
     // res.send(req.body);
@@ -30,9 +40,15 @@ router.post(
       if (user) {
         return res.status(400).json({ error: "Email exist" });
       }
+
+      // password encreption
+      const salt = await bcrypt.genSalt(10);
+      // create password variable
+      const secPass = await bcrypt.hash(req.body.password, salt);
+      //create user
       user = await User.create({
         name: req.body.name,
-        password: req.body.password,
+        password: secPass, //encripted password is save
         email: req.body.email,
       });
       // .then((user) => res.json(user))
@@ -40,7 +56,16 @@ router.post(
       //   (err) => console.log(err),
       //   res.json({ error: "Enter unique value" })
       // );
-      res.json({ user });
+
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+      const authToken = jwt.sign(data, JWT_SECRET);
+
+      // res.json(user);
+      res.json({ authToken });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("some error occur");
