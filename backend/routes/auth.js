@@ -13,7 +13,8 @@ var jwt = require("jsonwebtoken");
 //for giving token
 const JWT_SECRET = "JayISGoodB$oy";
 
-// create a user using : POST "/api/auth/createuser".no lofin required
+// Route 1: for create user
+// create a user using : POST "/api/auth/createuser".no login required
 router.post(
   "/createuser",
   [
@@ -72,4 +73,47 @@ router.post(
     }
   }
 );
+
+// Route 2: for  user login
+// authintecate a user using /api/auth/login/  no login required
+router.post(
+  "/login",
+  [
+    body("email", "enter a valid email").isEmail(),
+    body("password", "cannot blank").exists(),
+  ],
+  async (req, res) => {
+    //If there are errors , return bad request and errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    // array destructuring for getting the email and password from request body
+    // const [email, password] = req.body;
+    try {
+      let user = await User.findOne({ email: req.body.email });
+      if (!user) {
+        return res.status(400).json({ error: "sorry no user exist" });
+      }
+      const passwordCompare = await bcrypt.compare(
+        req.body.password,
+        user.password
+      );
+      if (!passwordCompare) {
+        return res.status(400).json({ error: "sorry password wrong" });
+      }
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+      const authToken = jwt.sign(data, JWT_SECRET);
+      res.json({ authToken });
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal server errors");
+    }
+  }
+);
+
 module.exports = router;
