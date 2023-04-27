@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
+const fetchuser = require("../middleware/fetchuser");
 //for password encription
 const bcrypt = require("bcryptjs");
 
@@ -107,6 +108,7 @@ router.post(
           id: user.id,
         },
       };
+      // we are sending id from data to added to the token
       const authToken = jwt.sign(data, JWT_SECRET);
       res.json({ authToken });
     } catch (error) {
@@ -116,4 +118,15 @@ router.post(
   }
 );
 
+// Route 3: Get loggedin details using POST "/api/auth/getlogin" (login require)
+router.post("/getlogin", fetchuser, async (req, res) => {
+  try {
+    const userid = req.user.id;
+    const user = await User.findOne({ _id: userid }).select("-password");
+    res.send(user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal server errors");
+  }
+});
 module.exports = router;
