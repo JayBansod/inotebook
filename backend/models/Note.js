@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const NotesSchema = new Schema({
+  // user is add to attach notes of perticular user
   user: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId, // foreignKey
     ref: "user",
   },
   title: { type: String, required: true },
