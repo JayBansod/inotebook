@@ -6,7 +6,7 @@ const Note = require("../models/Note");
 // for validation
 const { body, validationResult } = require("express-validator");
 
-//Route 1:fetch all notes get /api/notes/fetchallnotes/ login required
+//Route 1:fetch all notes GET /api/notes/fetchallnotes/ login required
 router.get("/fetchallnotes", fetchuser, async (req, res) => {
   try {
     const notes = await Note.find({ user: req.user.id });
@@ -18,7 +18,7 @@ router.get("/fetchallnotes", fetchuser, async (req, res) => {
   }
 });
 
-//ROUTE 2: Add a new node using posr "/api/notes/addnote" login required
+//ROUTE 2: Add a new node using POST "/api/notes/addnote" login required
 router.post(
   "/addnote",
   fetchuser,
@@ -50,4 +50,68 @@ router.post(
     }
   }
 );
+
+//ROUTE 3: Update a new node using PUT "/api/notes/updatenote" login required
+router.put("/updatenote/:id", fetchuser, async (req, res) => {
+  const { title, description, tag } = req.body;
+  try {
+    //create newnote object
+    const newnote = {};
+    if (title) {
+      newnote.title = title;
+    }
+    if (description) {
+      newnote.description = description;
+    }
+    if (tag) {
+      newnote.tag = tag;
+    }
+
+    //find note to be updated and update it
+
+    let note = await Note.findById(req.params.id);
+    if (!note) {
+      return res.status(404).send("Note not Found");
+    }
+
+    //find user has access to it
+    if (note.user.toString() !== req.user.id) {
+      return res.status(401).send("Not allowed");
+    }
+
+    note = await Note.findByIdAndUpdate(
+      req.params.id,
+      { $set: newnote },
+      { new: true }
+    );
+    res.json({ note });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("some error occur");
+  }
+});
+
+//ROUTE 4: DELETE a new node using DELETE "/api/notes/deletenote" login required
+router.delete("/deletenote/:id", fetchuser, async (req, res) => {
+  try {
+    //find note to be updated and update it
+
+    let note = await Note.findById(req.params.id);
+    if (!note) {
+      return res.status(404).send("Note not Found");
+    }
+
+    //find user has access to it
+    if (note.user.toString() !== req.user.id) {
+      return res.status(401).send("Not allowed");
+    }
+
+    note = await Note.findByIdAndDelete(req.params.id);
+    res.json({ success: "deleted successfuly", note: note });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("some error occur");
+  }
+});
+
 module.exports = router;
