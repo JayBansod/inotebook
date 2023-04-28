@@ -52,55 +52,33 @@ const NoteState = (props) => {
       date: "2023-04-28T19:20:53.072Z",
       __v: 0,
     },
-    {
-      _id: "644c1c9515ac8f7e8f9c1371",
-      user: "644acfce567aa3bccc28d6a5",
-      title: "789",
-      description: "this is new no",
-      tag: "general",
-      date: "2023-04-28T19:20:53.072Z",
-      __v: 0,
-    },
-    {
-      _id: "644c1c9515ac8f7e8f9c1371",
-      user: "644acfce567aa3bccc28d6a5",
-      title: "789",
-      description: "this is new no",
-      tag: "general",
-      date: "2023-04-28T19:20:53.072Z",
-      __v: 0,
-    },
-    {
-      _id: "644c1c9515ac8f7e8f9c1371",
-      user: "644acfce567aa3bccc28d6a5",
-      title: "789",
-      description: "this is new no",
-      tag: "general",
-      date: "2023-04-28T19:20:53.072Z",
-      __v: 0,
-    },
-    {
-      _id: "644c1c9515ac8f7e8f9c1371",
-      user: "644acfce567aa3bccc28d6a5",
-      title: "789",
-      description: "this is new no",
-      tag: "general",
-      date: "2023-04-28T19:20:53.072Z",
-      __v: 0,
-    },
-    {
-      _id: "644c1c9515ac8f7e8f9c1371",
-      user: "644acfce567aa3bccc28d6a5",
-      title: "789",
-      description: "this is new no",
-      tag: "general",
-      date: "2023-04-28T19:20:53.072Z",
-      __v: 0,
-    },
   ];
   const [notes, setNotes] = useState(noteInitiate);
+
+  //Add a note
+  const addNote = (title, description, tag) => {
+    //to api call
+    console.log("adding a note");
+    const note = {
+      _id: "644ad00e567aa3bccc28d6a7",
+      user: "644acfce567aa3bccc28d6a5",
+      title: "hello",
+      description: "this is new no [added]",
+      tag: "general",
+      date: "2023-04-27T19:42:06.734Z",
+      __v: 0,
+    };
+    setNotes(notes.concat(note));
+  };
+  //Delete Node
+  const deleteNote = (id) => {};
+
+  //Edit Note
+  const editNote = (id) => {};
   return (
-    <NoteContext.Provider value={{ notes, setNotes }}>
+    <NoteContext.Provider
+      value={{ notes, setNotes, addNote, deleteNote, editNote }}
+    >
       {props.children}
     </NoteContext.Provider>
   );
