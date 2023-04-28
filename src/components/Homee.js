@@ -1,6 +1,10 @@
-import React from "react";
-
+import React, { useContext } from "react";
+import noteConText from "../context/notes/noteContext";
 const Homee = () => {
+  // we created notecontext for accessing the valuse anywhere in the app
+  // we use useContext for these
+  const conText = useContext(noteConText);
+  const { notes, setNotes } = conText;
   return (
     <>
       <div className="container my-3">
@@ -46,6 +50,9 @@ const Homee = () => {
         </form>
       </div>
       <h1>Your Notes</h1>
+      {notes.map((notes) => {
+        return notes.title;
+      })}
     </>
   );
 };
