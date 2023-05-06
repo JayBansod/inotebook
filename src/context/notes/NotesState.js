@@ -47,7 +47,7 @@ const NoteState = (props) => {
         "auth-token":
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ0YWNmY2U1NjdhYTNiY2NjMjhkNmE1In0sImlhdCI6MTY4MjYyNDQ2Mn0.0lLc_-ecMx4GEPiX3p-JJ3_rIeOlOmbAfaZ-F6OF7J8",
       },
-      body: JSON.stringify([title, description, tag]),
+      body: JSON.stringify({ title, description, tag }),
     });
     console.log("adding a note");
     const note = {
@@ -62,7 +62,19 @@ const NoteState = (props) => {
     setNotes(notes.concat(note));
   };
   //Delete Node
-  const deleteNote = (id) => {
+  const deleteNote = async (id) => {
+    // api call
+    const response = await fetch(`${host}/api/notes/deletenote/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token":
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ0YWNmY2U1NjdhYTNiY2NjMjhkNmE1In0sImlhdCI6MTY4MjYyNDQ2Mn0.0lLc_-ecMx4GEPiX3p-JJ3_rIeOlOmbAfaZ-F6OF7J8",
+      },
+    });
+    const json = response.json();
+    console.log(json);
+
     const newNotes = notes.filter((notes) => {
       return notes._id !== id;
     });
@@ -80,7 +92,7 @@ const NoteState = (props) => {
         "auth-token":
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ0YWNmY2U1NjdhYTNiY2NjMjhkNmE1In0sImlhdCI6MTY4MjYyNDQ2Mn0.0lLc_-ecMx4GEPiX3p-JJ3_rIeOlOmbAfaZ-F6OF7J8",
       },
-      body: JSON.stringify([title, description, tag]),
+      body: JSON.stringify({ title, description, tag }),
     });
     // const json = response.json();
     // logic to edit

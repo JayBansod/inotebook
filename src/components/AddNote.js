@@ -8,8 +8,9 @@ const AddNote = () => {
 
   const [note, setNote] = useState({ title: "", description: "", tag: "" });
   const handelClick = (e) => {
+    console.log("adding note");
+    addNote(note.title, note.description, note.tag);
     e.preventDefault();
-    addNote(note);
   };
   const onChange = (e) => {
     setNote({ ...note, [e.target.name]: e.target.value });
@@ -41,6 +42,18 @@ const AddNote = () => {
               className="form-control"
               id="description"
               name="description"
+              onChange={onChange}
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="tag" className="form-label">
+              Tag
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="tag"
+              name="tag"
               onChange={onChange}
             />
           </div>
