@@ -84,8 +84,9 @@ router.post(
     body("password", "cannot blank").exists(),
   ],
   async (req, res) => {
+    let success = false;
     //If there are errors , return bad request and errors
-    const errors = validationResult(req);
+    let errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -94,14 +95,14 @@ router.post(
     try {
       let user = await User.findOne({ email: req.body.email });
       if (!user) {
-        return res.status(400).json({ error: "sorry no user exist" });
+        return res.status(400).json({ success, error: "sorry no user exist" });
       }
       const passwordCompare = await bcrypt.compare(
         req.body.password,
         user.password
       );
       if (!passwordCompare) {
-        return res.status(400).json({ error: "sorry password wrong" });
+        return res.status(400).json({ success, error: "sorry password wrong" });
       }
       const data = {
         user: {
@@ -110,7 +111,8 @@ router.post(
       };
       // we are sending id from data to added to the token
       const authToken = jwt.sign(data, JWT_SECRET);
-      res.json({ authToken });
+      success = true;
+      res.json({ success, authToken });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal server errors");
