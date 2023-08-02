@@ -13,7 +13,7 @@ const Signup = (props) => {
 
   const handelSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, password } = credential;
+    // const { name, email, password } = credential;
     const response = await fetch("http://localhost:5000/api/auth/createuser", {
       method: "POST",
       headers: {
@@ -30,7 +30,8 @@ const Signup = (props) => {
     console.log(json);
     if (json.success) {
       //save the authtoken
-      localStorage.setItem("token", json.authtoken);
+      localStorage.setItem("token", json.authToken);
+      console.log("sign in authtoken " + json.authToken);
       //redirect
       props.showAlert("Signup Successfully", "success");
       navigate("/");
@@ -45,6 +46,8 @@ const Signup = (props) => {
   return (
     <>
       <div className="container">
+        <h2>Create An Account To Use iNoteBook</h2>
+
         <form onSubmit={handelSubmit}>
           <div className="mb-3">
             <label htmlFor="name" className="form-label">
@@ -100,16 +103,7 @@ const Signup = (props) => {
               required
             />
           </div>
-          <div className="mb-3 form-check">
-            <input
-              type="checkbox"
-              className="form-check-input"
-              id="exampleCheck1"
-            />
-            <label className="form-check-label" htmlFor="exampleCheck1">
-              Check me out
-            </label>
-          </div>
+
           <button type="submit" className="btn btn-primary">
             Submit
           </button>

@@ -2,15 +2,20 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import noteConText from "../context/notes/noteContext";
 import Noteitem from "./Noteitem";
 import AddNote from "./AddNote";
+import { useNavigate } from "react-router-dom";
 
 const Notes = (props) => {
-  const { showAlert } = props;
+  const navigate = useNavigate();
   // we created notecontext for accessing the valuse anywhere in the app
   // we use useContext for these
   const conText = useContext(noteConText);
   const { notes, getNotes, editNote } = conText;
   useEffect(() => {
-    getNotes();
+    if (localStorage.getItem("token")) {
+      getNotes();
+    } else {
+      navigate("/login");
+    }
   }, []);
   const ref = useRef(null);
   const refClose = useRef(null);

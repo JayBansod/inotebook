@@ -1,13 +1,22 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
-export default function Navbar() {
+export default function Navbar(props) {
+  const navigate = useNavigate();
   //when location gets change
   let location = useLocation();
   React.useEffect(() => {
     //to know on which location we are
     console.log(location.pathname);
   }, [location]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+
+    props.showAlert("Logout Successfully", "success");
+  };
+
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -50,14 +59,28 @@ export default function Navbar() {
                 </Link>
               </li>
             </ul>
-            <form className="d-flex" role="search">
-              <Link className="btn btn-primary  mx-2" to="/login" role="button">
-                Login
-              </Link>
-              <Link className="btn btn-primary mx-2" to="/signup" role="button">
-                Signup
-              </Link>
-            </form>
+            {!localStorage.getItem("token") ? (
+              <form className="d-flex" role="search">
+                <Link
+                  className="btn btn-primary  mx-2"
+                  to="/login"
+                  role="button"
+                >
+                  Login
+                </Link>
+                <Link
+                  className="btn btn-primary mx-2"
+                  to="/signup"
+                  role="button"
+                >
+                  Signup
+                </Link>
+              </form>
+            ) : (
+              <button onClick={handleLogout} className="btn btn-primary">
+                Logout
+              </button>
+            )}
           </div>
         </div>
       </nav>
