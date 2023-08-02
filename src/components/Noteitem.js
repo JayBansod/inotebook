@@ -12,11 +12,13 @@ const Noteitem = (props) => {
           <div className="card-body">
             <h5 className="card-title">{note.title}</h5>
             <p className="card-text ">{note.description}</p>
+            {/* <p className="card-text ">{note.tag}</p> */}
             <div className="d-flex align-items-center justify-content-between pt-2 my-2">
               <i
                 className="fa-solid fa-trash fa-xl mx-2"
                 onClick={() => {
                   deleteNote(note._id);
+                  props.showAlert("Deleted successfully", "success");
                 }}
               ></i>
               <i

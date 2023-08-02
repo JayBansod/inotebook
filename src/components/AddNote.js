@@ -1,16 +1,18 @@
 import React, { useContext, useState } from "react";
 import noteConText from "../context/notes/noteContext";
 
-const AddNote = () => {
+const AddNote = (props) => {
   //to access add note function written in NoteState.js
   const conText = useContext(noteConText);
   const { addNote } = conText;
 
   const [note, setNote] = useState({ title: "", description: "", tag: "" });
+
   const handelClick = (e) => {
     console.log("adding note");
     addNote(note.title, note.description, note.tag);
     setNote({ title: "", description: "", tag: "" });
+    props.showAlert("Added successfully", "success");
   };
   const onChange = (e) => {
     setNote({ ...note, [e.target.name]: e.target.value });

@@ -1,9 +1,10 @@
 import React from "react";
 import Notes from "./Notes";
-const Homee = () => {
+const Homee = (props) => {
+  const { showAlert } = props;
   return (
     <>
-      <Notes />
+      <Notes showAlert={showAlert} />
     </>
   );
 };
