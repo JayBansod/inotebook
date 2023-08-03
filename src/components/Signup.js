@@ -14,7 +14,7 @@ const Signup = (props) => {
   const handelSubmit = async (e) => {
     e.preventDefault();
     // const { name, email, password } = credential;
-    const response = await fetch("http://localhost:5000/api/auth/createuser", {
+    const response = await fetch("https://jaybansod.github.io/api/auth/createuser", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
