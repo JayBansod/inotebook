@@ -34,6 +34,11 @@ function App() {
               path="/home"
               element={<Homee showAlert={showAlert} />}
             />
+            <Route
+              exact
+              path="/inotebook"
+              element={<Homee showAlert={showAlert} />}
+            />
             <Route exact path="/about" element={<About />} />
             <Route
               exact
