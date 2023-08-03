@@ -36,7 +36,7 @@ const Login = (props) => {
   };
   return (
     <>
-      <h2>Login to Use iNoteBook</h2>
+      <h2>Login to Use Your iNoteBook </h2>
       <form onSubmit={handelSubmit}>
         <div className="mb-3">
           <label htmlFor="email" className="form-label">
